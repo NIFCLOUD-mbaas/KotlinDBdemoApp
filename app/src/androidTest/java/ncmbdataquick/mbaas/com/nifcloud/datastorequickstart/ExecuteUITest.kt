@@ -37,6 +37,7 @@ class ExecuteUITest {
     @Test
     fun doStartDemo() {
         btnStart!!.perform(click())
+        Thread.sleep(5000)
         onView(withText(containsString("Save successfull! with ID:"))).check(matches(isDisplayed()))
     }
 

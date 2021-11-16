@@ -1,12 +1,15 @@
 package ncmbdataquick.mbaas.com.nifcloud.datastorequickstart
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.nifcloud.mbaas.core.NCMB
+import com.nifcloud.mbaas.core.NCMBCallback
 import com.nifcloud.mbaas.core.NCMBException
 import com.nifcloud.mbaas.core.NCMBObject
 
@@ -43,25 +46,29 @@ class MainActivity : AppCompatActivity() {
         val obj = NCMBObject("TestClass")
         try {
             obj.put("message", "Hello, NCMB!")
-            obj.saveInBackground { e ->
+            obj.saveInBackground(NCMBCallback { e, ncmbObj ->
                 if (e != null) {
                     //保存失敗
-                    AlertDialog.Builder(this@MainActivity)
+                    Handler(Looper.getMainLooper()).post {
+                        AlertDialog.Builder(this)
                             .setTitle("Notification from NIFCLOUD")
                             .setMessage("Error:" + e.message)
                             .setPositiveButton("OK", null)
                             .show()
-
+                    }
                 } else {
-                    //保存成功
-                    AlertDialog.Builder(this@MainActivity)
+                    Handler(Looper.getMainLooper()).post {
+                        //保存成功
+                        val result = ncmbObj as NCMBObject
+                        AlertDialog.Builder(this)
                             .setTitle("Notification from NIFCLOUD")
-                            .setMessage("Save successfull! with ID:" + obj.objectId)
+                            .setMessage("Save successfull! with ID:" + result.getObjectId())
                             .setPositiveButton("OK", null)
                             .show()
+                    }
 
                 }
-            }
+            })
         } catch (e: NCMBException) {
             e.printStackTrace()
         }
