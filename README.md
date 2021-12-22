@@ -66,8 +66,8 @@ SDKはここ（[SDK リリースページ](https://github.com/NIFCloud-mbaas/ncm
   - app/build.gradleファイルに以下を追加します
 ```gradle
 dependencies {
-    compile 'com.google.code.gson:gson:2.3.1'
-    compile files('libs/NCMB.jar')
+    implementation 'com.google.code.gson:gson:2.3.1'
+    implementation files('libs/NCMB.jar')
 }
 ```
   - androidManifestの設定
@@ -110,6 +110,8 @@ mBaaS側もデータが保存されたことを確認しています！
 
 ```kotlin
 import com.nifcloud.mbaas.core.NCMB
+import com.nifcloud.mbaas.core.NCMBCallback
+import com.nifcloud.mbaas.core.NCMBException
 import com.nifcloud.mbaas.core.NCMBObject
 ```
 
@@ -137,15 +139,15 @@ override fun onCreate(savedInstanceState: Bundle?) {
 val obj = NCMBObject("TestClass")
 try {
     obj.put("message", "Hello, NCMB!")
-    obj.saveInBackground { e ->
+    obj.saveInBackground(NCMBCallback { e, ncmbObj ->
         if (e != null) {
             //保存失敗
-
+            
         } else {
-            //保存成功
-
+                //保存成功
+            }
         }
-    }
+            })
 } catch (e: NCMBException) {
     e.printStackTrace()
 }
