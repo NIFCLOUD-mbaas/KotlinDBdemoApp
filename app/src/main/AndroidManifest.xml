@@ -11,6 +11,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme" >
         <activity
+            android:exported="true"
             android:name="ncmbdataquick.mbaas.com.nifcloud.datastorequickstart.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme" >
